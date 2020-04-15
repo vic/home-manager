@@ -116,7 +116,7 @@ in
       done automatically if the shell configuration is managed by Home
       Manager. If not, then you must source the
 
-        ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+        ~/.nix-profile/etc/profile.d/${config.home.sessionVariablesFileName}
 
       file yourself.
     '')
@@ -213,6 +213,15 @@ in
           BAR = "''${config.home.sessionVariables.FOO} World!";
         };
         </programlisting>
+      '';
+    };
+
+    home.sessionVariablesFileName = mkOption {
+      type = types.str;
+      default = "hm-session-vars.sh";
+      internal = true;
+      description = ''
+        The name of the file for the session variables.
       '';
     };
 
@@ -379,8 +388,8 @@ in
       # Provide a file holding all session variables.
       (
         pkgs.writeTextFile {
-          name = "hm-session-vars.sh";
-          destination = "/etc/profile.d/hm-session-vars.sh";
+          name = config.home.sessionVariablesFileName;
+          destination = "/etc/profile.d/${config.home.sessionVariablesFileName}";
           text = ''
             # Only source this once.
             if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi

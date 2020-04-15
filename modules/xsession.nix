@@ -121,7 +121,7 @@ in {
     };
 
     home.file.".xprofile".text = ''
-      . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+      . "${config.home.profileDirectory}/etc/profile.d/${config.home.sessionVariablesFileName}"
 
       if [ -e "$HOME/.profile" ]; then
         . "$HOME/.profile"

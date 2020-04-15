@@ -344,7 +344,7 @@ in {
         if not set -q __fish_general_config_sourced
 
           set -p fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions
-          fenv source ${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh > /dev/null
+          fenv source ${config.home.profileDirectory}/etc/profile.d/${config.home.sessionVariablesFileName} > /dev/null
           set -e fish_function_path[1]
 
           ${cfg.shellInit}
