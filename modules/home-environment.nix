@@ -248,6 +248,13 @@ in
       description = "The derivation installing the user packages.";
     };
 
+    home.pathName = mkOption {
+      type = types.str;
+      default = "home-manager-path";
+      internal = true;
+      description = "The name of the derivation installing the user packages.";
+    };
+
     home.emptyActivationPath = mkOption {
       internal = true;
       default = false;
@@ -408,8 +415,8 @@ in
       if config.submoduleSupport.externalPackageInstall
       then
         ''
-          if nix-env -q | grep '^home-manager-path$'; then
-            $DRY_RUN_CMD nix-env -e home-manager-path
+          if nix-env -q | grep '^${config.home.pathName}$'; then
+            $DRY_RUN_CMD nix-env -e ${config.home.pathName}
           fi
         ''
       else
@@ -485,7 +492,7 @@ in
           '';
 
     home.path = pkgs.buildEnv {
-      name = "home-manager-path";
+      name = config.home.pathName;
 
       paths = cfg.packages;
       inherit (cfg) extraOutputsToInstall;
