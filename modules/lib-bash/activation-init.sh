@@ -6,7 +6,7 @@ function setupVars() {
     local greatestGenNum
 
     greatestGenNum=$( \
-        find "$profilesPath" -name 'home-manager-*-link' \
+        find "$profilesPath" -name '@GEN_LINK_PREFIX@-*-link' \
             | sed 's/^.*-\([0-9]*\)-link$/\1/' \
             | sort -rn \
             | head -1)
@@ -18,8 +18,8 @@ function setupVars() {
         newGenNum=1
     fi
 
-    if [[ -e $gcPath/current-home ]] ; then
-        oldGenPath="$(readlink -e "$gcPath/current-home")"
+    if [[ -e $gcPath/@GC_LINK_NAME@ ]] ; then
+        oldGenPath="$(readlink -e "$gcPath/@GC_LINK_NAME@")"
     fi
 
     $VERBOSE_ECHO "Sanity checking oldGenNum and oldGenPath"
@@ -30,17 +30,17 @@ function setupVars() {
         errorEcho "    '${oldGenNum:-}' and '${oldGenPath:-}'"
         errorEcho "If you don't mind losing previous profile generations then"
         errorEcho "the easiest solution is probably to run"
-        errorEcho "   rm $profilesPath/home-manager*"
-        errorEcho "   rm $gcPath/current-home"
+        errorEcho "   rm $profilesPath/@GEN_LINK_PREFIX@*"
+        errorEcho "   rm $gcPath/@GC_LINK_NAME@"
         errorEcho "and trying home-manager switch again. Good luck!"
         exit 1
     fi
 
 
-    genProfilePath="$profilesPath/home-manager"
+    genProfilePath="$profilesPath/@GEN_LINK_PREFIX@"
     newGenPath="@GENERATION_DIR@";
-    newGenProfilePath="$profilesPath/home-manager-$newGenNum-link"
-    newGenGcPath="$gcPath/current-home"
+    newGenProfilePath="$profilesPath/@GEN_LINK_PREFIX@-$newGenNum-link"
+    newGenGcPath="$gcPath/@GC_LINK_NAME@"
 }
 
 if [[ -v VERBOSE ]]; then

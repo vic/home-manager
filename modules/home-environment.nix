@@ -123,6 +123,24 @@ in
   ];
 
   options = {
+    home.gcLinkName = mkOption {
+      type = types.str;
+      default = "current-home";
+      internal = true;
+      description = ''
+        The name of the link to create in the gcRoot.
+      '';
+    };
+
+    home.generationLinkNamePrefix = mkOption {
+      type = types.str;
+      default = "home-manager";
+      internal = true;
+      description = ''
+        The prefix of the link name of the generation.
+      '';
+    };
+
     home.username = mkOption {
       type = types.str;
       defaultText = "$USER";
@@ -456,6 +474,8 @@ in
             cp ${activationScript} $out/activate
 
             substituteInPlace $out/activate \
+              --subst-var-by GEN_LINK_PREFIX ${config.home.generationLinkNamePrefix} \
+              --subst-var-by GC_LINK_NAME ${config.home.gcLinkName} \
               --subst-var-by GENERATION_DIR $out
 
             ln -s ${config.home-files} $out/home-files
