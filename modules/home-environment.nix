@@ -382,7 +382,7 @@ in
 
     home.pathName = mkOption {
       type = types.str;
-      default = "${config.home.pathName}";
+      default = "home-manager-path";
       internal = true;
       description = "The name of the derivation installing the user packages.";
     };
