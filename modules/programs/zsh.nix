@@ -504,13 +504,6 @@ in
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         }
 
-<<<<<<< HEAD
-        # Environment variables
-        . "${config.home.profileDirectory}/etc/profile.d/${config.home.sessionVariablesFileName}"
-        ${envVarsStr}
-
-=======
->>>>>>> origin/master
         ${optionalString cfg.oh-my-zsh.enable ''
             # oh-my-zsh extra settings for plugins
             ${cfg.oh-my-zsh.extraConfig}
