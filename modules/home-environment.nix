@@ -382,7 +382,7 @@ in
 
     home.pathName = mkOption {
       type = types.str;
-      default = "home-manager-path";
+      default = "${config.home.pathName}";
       internal = true;
       description = "The name of the derivation installing the user packages.";
     };
@@ -616,42 +616,70 @@ in
     #
     # In case the user has moved from a user-install of Home Manager
     # to a submodule managed one we attempt to uninstall the
-    # `home-manager-path` package if it is installed.
+    # `${config.home.pathName}` package if it is installed.
     home.activation.installPackages = hm.dag.entryAfter ["writeBoundary"] (
       if config.submoduleSupport.externalPackageInstall
       then
         ''
-          if nix-env -q | grep '^${config.home.pathName}$'; then
-            $DRY_RUN_CMD nix-env -e ${config.home.pathName}
+          if [[ -e "$nixProfilePath"/manifest.json ]] ; then
+            nix profile list \
+              | { grep '${config.home.pathName}$' || test $? = 1; } \
+              | awk -F ' ' '{ print $4 }' \
+              | cut -d ' ' -f 4 \
+              | xargs -t $DRY_RUN_CMD nix profile remove $VERBOSE_ARG
+          else
+            if nix-env -q | grep '^${config.home.pathName}$'; then
+              $DRY_RUN_CMD nix-env -e ${config.home.pathName}
+            fi
           fi
         ''
       else
         ''
-          if ! $DRY_RUN_CMD nix-env -i ${cfg.path} ; then
-            cat <<EOF
+          if [[ -e "$nixProfilePath"/manifest.json ]] ; then
+            INSTALL_CMD="nix profile install"
+            LIST_CMD="nix profile list"
+            REMOVE_CMD_SYNTAX='nix profile remove {number | store path}'
+          else
+            INSTALL_CMD="nix-env -i"
+            LIST_CMD="nix-env -q"
+            REMOVE_CMD_SYNTAX='nix-env -e {package name}'
+          fi
 
-          Oops, nix-env failed to install your new Home Manager profile!
-
-          Perhaps there is a conflict with a package that was installed using
-          'nix-env -i'? Try running
-
-              nix-env -q
-
-          and if there is a conflicting package you can remove it with
-
-              nix-env -e {package name}
-
-          Then try activating your Home Manager configuration again.
-          EOF
+          if ! $DRY_RUN_CMD $INSTALL_CMD ${cfg.path} ; then
+            echo
+            _iError $'Oops, Nix failed to install your new Home Manager profile!\n\nPerhaps there is a conflict with a package that was installed using\n"%s"? Try running\n\n    %s\n\nand if there is a conflicting package you can remove it with\n\n    %s\n\nThen try activating your Home Manager configuration again.' "$INSTALL_CMD" "$LIST_CMD" "$REMOVE_CMD_SYNTAX"
             exit 1
           fi
+          unset INSTALL_CMD LIST_CMD REMOVE_CMD_SYNTAX
         ''
     );
+
+    # Text containing Bash commands that will initialize the Home Manager Bash
+    # library. Most importantly, this will prepare for using translated strings
+    # in the `hm-modules` text domain.
+    lib.bash.initHomeManagerLib =
+      let
+        domainDir = pkgs.runCommand "hm-modules-messages" {
+          nativeBuildInputs = [ pkgs.gettext ];
+        } ''
+          for path in ${./po}/*.po; do
+            lang="''${path##*/}"
+            lang="''${lang%%.*}"
+            mkdir -p "$out/$lang/LC_MESSAGES"
+            msgfmt -o "$out/$lang/LC_MESSAGES/hm-modules.mo" "$path"
+          done
+        '';
+      in
+        ''
+          export TEXTDOMAIN=hm-modules
+          export TEXTDOMAINDIR=${domainDir}
+          source ${../lib/bash/home-manager.sh}
+        '';
 
     home.activationPackage =
       let
         mkCmd = res: ''
-            noteEcho Activating ${res.name}
+            _iNote "Activating %s" "${res.name}"
             ${res.data}
           '';
         sortedCommands = hm.dag.topoSort cfg.activation;
@@ -665,14 +693,15 @@ in
         # Programs that always should be available on the activation
         # script's PATH.
         activationBinPaths = lib.makeBinPath (
-          [
-            pkgs.bash
-            pkgs.coreutils
-            pkgs.diffutils        # For `cmp` and `diff`.
-            pkgs.findutils
-            pkgs.gnugrep
-            pkgs.gnused
-            pkgs.ncurses          # For `tput`.
+          with pkgs; [
+            bash
+            coreutils
+            diffutils           # For `cmp` and `diff`.
+            findutils
+            gettext
+            gnugrep
+            gnused
+            ncurses             # For `tput`.
           ] ++ config.home.extraActivationPath
         )
         + optionalString (!cfg.emptyActivationPath) "\${PATH:+:}$PATH";
@@ -684,8 +713,7 @@ in
           cd $HOME
 
           export PATH="${activationBinPaths}"
-
-          . ${./lib-bash/color-echo.sh}
+          ${config.lib.bash.initHomeManagerLib}
 
           ${builtins.readFile ./lib-bash/activation-init.sh}
 

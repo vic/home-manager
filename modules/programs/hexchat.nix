@@ -212,7 +212,7 @@ let
   # Note: Missing option `D=`.
   transformChannel = channelName:
     let channel = cfg.channels.${channelName};
-    in concatStringsSep "\n" (filter (v: v != null) [
+    in concatStringsSep "\n" (remove null [
       "" # leave a space between one server and another
       (transformField "N" channelName)
       (loginMethod channel)
@@ -229,7 +229,7 @@ let
     ]);
 
 in {
-  meta.maintainers = with maintainers; [ superherointj thiagokokada ];
+  meta.maintainers = with maintainers; [ thiagokokada ];
 
   options.programs.hexchat = with types; {
     enable = mkEnableOption "HexChat, a graphical IRC client";
@@ -270,7 +270,7 @@ in {
           };
         }'';
       description = ''
-        Configures <filename>~/.config/hexchat/servlist.conf</filename>.
+        Configures <filename>$XDG_CONFIG_HOME/hexchat/servlist.conf</filename>.
       '';
     };
 
@@ -286,7 +286,7 @@ in {
         };
       '';
       description = ''
-        Configuration for <filename>~/.config/hexchat/hexchat.conf</filename>, see
+        Configuration for <filename>$XDG_CONFIG_HOME/hexchat/hexchat.conf</filename>, see
         <link xlink:href="https://hexchat.readthedocs.io/en/latest/settings.html#list-of-settings"/>
         for supported values.
       '';

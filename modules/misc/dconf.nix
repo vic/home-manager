@@ -11,7 +11,7 @@ let
   mkIniKeyValue = key: value: "${key}=${toString (hm.gvariant.mkValue value)}";
 
 in {
-  meta.maintainers = [ maintainers.gnidorah maintainers.rycee ];
+  meta.maintainers = [ maintainers.rycee ];
 
   options = {
     dconf = {
@@ -21,6 +21,11 @@ in {
         visible = false;
         description = ''
           Whether to enable dconf settings.
+          </para><para>
+          Note, if you use NixOS then you must add
+          <code>programs.dconf.enable = true</code>
+          to your system configuration. Otherwise you will see a systemd error
+          message when your configuration is activated.
         '';
       };
 

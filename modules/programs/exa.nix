@@ -15,7 +15,7 @@ let
   };
 
 in {
-  meta.maintainers = [ maintainers.kalhauge ];
+  meta.maintainers = [ hm.maintainers.kalhauge ];
 
   options.programs.exa = {
     enable =
@@ -32,5 +32,6 @@ in {
 
     programs.fish.shellAliases = mkIf cfg.enableAliases aliases;
 
+    programs.ion.shellAliases = mkIf cfg.enableAliases aliases;
   };
 }

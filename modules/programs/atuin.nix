@@ -40,6 +40,16 @@ in {
       '';
     };
 
+    enableFishIntegration = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to enable Atuin's Fish integration.
+        </para><para>
+        If enabled, this will bind the up-arrow key to open the Atuin history.
+      '';
+    };
+
     settings = mkOption {
       type = with types;
         let
@@ -60,7 +70,7 @@ in {
       '';
       description = ''
         Configuration written to
-        <filename>~/.config/atuin/config.toml</filename>.
+        <filename>$XDG_CONFIG_HOME/atuin/config.toml</filename>.
         </para><para>
         See <link xlink:href="https://github.com/ellie/atuin/blob/main/docs/config.md" /> for the full list
         of options.
@@ -79,12 +89,20 @@ in {
     };
 
     programs.bash.initExtra = mkIf cfg.enableBashIntegration ''
-      source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
-      eval "$(${cfg.package}/bin/atuin init bash)"
+      if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
+        source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
+        eval "$(${cfg.package}/bin/atuin init bash)"
+      fi
     '';
 
     programs.zsh.initExtra = mkIf cfg.enableZshIntegration ''
-      eval "$(${cfg.package}/bin/atuin init zsh)"
+      if [[ $options[zle] = on ]]; then
+        eval "$(${cfg.package}/bin/atuin init zsh)"
+      fi
+    '';
+
+    programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
+      ${cfg.package}/bin/atuin init fish | source
     '';
   };
 }

@@ -9,7 +9,11 @@ specific (non global) packages and dotfiles.
 Before attempting to use Home Manager please read the warning below.
 
 For a more systematic overview of Home Manager and its available
-options, please see the [Home Manager manual][manual].
+options, please see the Home Manager [manual][manual] and
+[options][configuration options].
+
+If you would like to contribute to Home Manager
+then please have a look at the [contributing][] chapter of the manual.
 
 Words of warning
 ----------------
@@ -47,8 +51,9 @@ all this out you can go ahead and read the rest of this text.
 Contact
 -------
 
-You can chat with us on IRC in the channel [#home-manager][] on
-[OFTC][].
+You can chat with us on IRC in the channel [#home-manager][] on [OFTC][].
+There is also a [Matrix room](https://matrix.to/#/#hm:rycee.net),
+which is bridged to the IRC channel.
 
 Installation
 ------------
@@ -73,77 +78,21 @@ Home Manager can be used in three primary ways:
    installation][manual nix-darwin install] in the manual for a
    description of this setup.
 
-Nix Flakes
-----------
+Home Manager provides both the channel-based setup and the flake-based one.
+See [Nix Flakes][manual nix flakes] for a description of the flake-based setup.
 
-Home Manager includes a `flake.nix` file for compatibility with [Nix Flakes][]
-for those that wish to use it as a module. A bare-minimum `flake.nix` would be
-as follows:
+Translations
+------------
 
-```nix
-{
-  description = "NixOS configuration";
+Home Manager has basic support for internationalization through
+[gettext](https://www.gnu.org/software/gettext/). The translations are
+hosted by [Weblate](https://weblate.org/). If you would like to
+contribute to the translation effort then start by going to the
+[Home Manager Weblate project](https://hosted.weblate.org/engage/home-manager/).
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-  };
-
-  outputs = { home-manager, nixpkgs, ... }: {
-    nixosConfigurations = {
-      hostname = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.jdoe = import ./home.nix;
-
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
-          }
-        ];
-      };
-    };
-  };
-}
-```
-
-If you are not using NixOS you can place the following flake in
-`~/.config/nixpkgs/flake.nix` to load your standard Home Manager
-configuration:
-
-```nix
-{
-  description = "A Home Manager flake";
-
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-  };
-
-  outputs = inputs: {
-    homeConfigurations = {
-      jdoe = inputs.home-manager.lib.homeManagerConfiguration {
-        system = "x86_64-linux";
-        homeDirectory = "/home/jdoe";
-        username = "jdoe";
-        configuration.imports = [ ./home.nix ];
-      };
-    };
-  };
-}
-```
-
-Note, the Home Manager library is exported by the flake under
-`lib.hm`.
-
-When using flakes, switch to new configurations as you do for the
-whole system (e. g. `nixos-rebuild switch --flake <path>`) instead of
-using the `home-manager` command line tool.
+<a href="https://hosted.weblate.org/engage/home-manager/">
+<img src="https://hosted.weblate.org/widgets/home-manager/-/multi-auto.svg" alt="Translation status" />
+</a>
 
 Releases
 --------
@@ -165,6 +114,7 @@ This project is licensed under the terms of the [MIT license](LICENSE).
 [NixOS]: https://nixos.org/
 [Nixpkgs]: https://nixos.org/nixpkgs/
 [manual]: https://nix-community.github.io/home-manager/
+[contributing]: https://nix-community.github.io/home-manager/#ch-contributing
 [manual usage]: https://nix-community.github.io/home-manager/#ch-usage
 [configuration options]: https://nix-community.github.io/home-manager/options.html
 [#home-manager]: https://webchat.oftc.net/?channels=home-manager
@@ -175,3 +125,4 @@ This project is licensed under the terms of the [MIT license](LICENSE).
 [manual standalone install]: https://nix-community.github.io/home-manager/index.html#sec-install-standalone
 [manual nixos install]: https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
 [manual nix-darwin install]: https://nix-community.github.io/home-manager/index.html#sec-install-nix-darwin-module
+[manual nix flakes]: https://nix-community.github.io/home-manager/index.html#ch-nix-flakes

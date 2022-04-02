@@ -16,6 +16,8 @@ with lib;
         mimeType = [ "text/html" "text/xml" ];
         categories = [ "Network" "WebBrowser" ];
         startupNotify = false;
+        noDisplay = false;
+        prefersNonDefaultGPU = false;
         extraConfig = ''
           [X-ExtraSection]
           Exec=foo -o
@@ -45,6 +47,13 @@ with lib;
         exec = "no";
       })
     ];
+
+    test.asserts.assertions.expected =
+      let currentFile = toString ./desktop-entries.nix;
+      in [''
+        The option definition `extraConfig' in `${currentFile}' no longer has any effect; please remove it.
+        The `extraConfig` option of `xdg.desktopEntries` has been removed following a change in Nixpkgs.
+      ''];
 
     nmt.script = ''
       assertFileExists home-path/share/applications/full.desktop

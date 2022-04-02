@@ -13,6 +13,6 @@
   nmt.script = ''
     assertFileExists home-files/.config/sway/config
     assertFileContent home-files/.config/sway/config \
-      ${pkgs.writeText "expected" "\n"}
+      ${pkgs.writeText "expected" ""}
   '';
 }

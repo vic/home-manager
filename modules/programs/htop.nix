@@ -89,7 +89,7 @@ let
   blank = text "Blank";
 
 in {
-  meta.maintainers = [ maintainers.bjpbakker ];
+  meta.maintainers = [ hm.maintainers.bjpbakker ];
 
   options.programs.htop = {
     enable = mkEnableOption "htop";
@@ -133,7 +133,7 @@ in {
       '';
       description = ''
         Configuration options to add to
-        <filename>~/.config/htop/htoprc</filename>.
+        <filename>$XDG_CONFIG_HOME/htop/htoprc</filename>.
       '';
     };
 

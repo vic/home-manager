@@ -443,6 +443,19 @@ in
     })
 
     {
+      home.file."${relToDotDir ".zshenv"}".text = ''
+        # Environment variables
+        . "${config.home.profileDirectory}/etc/profile.d/${config.home.sessionVariablesFileName}"
+
+        # Only source this once
+        if [[ -z "$__HM_ZSH_SESS_VARS_SOURCED" ]]; then
+          export __HM_ZSH_SESS_VARS_SOURCED=1
+          ${envVarsStr}
+        fi
+      '';
+    }
+
+    {
       home.packages = with pkgs; [ zsh ]
         ++ optional cfg.enableCompletion nix-zsh-completions
         ++ optional cfg.oh-my-zsh.enable oh-my-zsh;
@@ -491,10 +504,13 @@ in
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         }
 
+<<<<<<< HEAD
         # Environment variables
         . "${config.home.profileDirectory}/etc/profile.d/${config.home.sessionVariablesFileName}"
         ${envVarsStr}
 
+=======
+>>>>>>> origin/master
         ${optionalString cfg.oh-my-zsh.enable ''
             # oh-my-zsh extra settings for plugins
             ${cfg.oh-my-zsh.extraConfig}

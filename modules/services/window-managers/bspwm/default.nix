@@ -10,7 +10,19 @@ let
     builtins.replaceStrings upperChars (map (c: "_${c}") lowerChars);
 
   formatMonitor = monitor: desktops:
-    "bspc monitor ${escapeShellArg monitor} -d ${escapeShellArgs desktops}";
+    let
+      resetDesktops =
+        "bspc monitor ${escapeShellArg monitor} -d ${escapeShellArgs desktops}";
+      defaultDesktopName =
+        "Desktop"; # https://github.com/baskerville/bspwm/blob/master/src/desktop.h
+    in if cfg.alwaysResetDesktops then
+      resetDesktops
+    else ''
+      if [[ $(bspc query --desktops --names --monitor ${
+        escapeShellArg monitor
+      }) == ${defaultDesktopName} ]]; then
+        ${resetDesktops}
+      fi'';
 
   formatValue = v:
     if isList v then
@@ -63,6 +75,12 @@ in {
 
       ${cfg.extraConfig}
       ${concatMapStringsSep "\n" formatStartupProgram cfg.startupPrograms}
+    '';
+
+    # for applications not started by bspwm, e.g. sxhkd
+    xsession.profileExtra = ''
+      # java gui fixes
+      export _JAVA_AWT_WM_NONREPARENTING=1
     '';
 
     xsession.windowManager.command =

@@ -144,7 +144,7 @@ let
 
 in {
   xsession.windowManager.bspwm = {
-    enable = mkEnableOption "bspwm window manager.";
+    enable = mkEnableOption "bspwm window manager";
 
     package = mkOption {
       type = types.package;
@@ -183,6 +183,19 @@ in {
       description =
         "Specifies the names of desktops to create on each monitor.";
       example = { "HDMI-0" = [ "web" "terminal" "III" "IV" ]; };
+    };
+
+    alwaysResetDesktops = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        If set to <literal>true</literal>, desktops configured in <option>monitors</option> will be reset
+        every time the config is run.
+
+        If set to <literal>false</literal>, desktops will only be configured the first time the config is run.
+        This is useful if you want to dynamically add desktops and you don't want them to be destroyed if you
+        re-run <literal>bspwmrc</literal>.
+      '';
     };
 
     rules = mkOption {

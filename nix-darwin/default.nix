@@ -29,6 +29,10 @@ let
 
           home.username = config.users.users.${name}.name;
           home.homeDirectory = config.users.users.${name}.home;
+
+          # Make activation script use same version of Nix as system as a whole.
+          # This avoids problems with Nix not being in PATH.
+          home.extraActivationPath = [ config.nix.package ];
         };
       })
     ] ++ cfg.sharedModules;
@@ -130,7 +134,7 @@ in
     system.activationScripts.postActivation.text =
       concatStringsSep "\n" (mapAttrsToList (username: usercfg: ''
         echo Activating home-manager configuration for ${username}
-        sudo -u ${username} -i ${pkgs.writeShellScript "activation-${username}" ''
+        sudo -u ${username} -s --set-home ${pkgs.writeShellScript "activation-${username}" ''
           ${lib.optionalString (cfg.backupFileExtension != null)
             "export HOME_MANAGER_BACKUP_EXT=${lib.escapeShellArg cfg.backupFileExtension}"}
           ${lib.optionalString cfg.verbose "export VERBOSE=1"}

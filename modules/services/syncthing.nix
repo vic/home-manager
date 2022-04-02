@@ -2,12 +2,25 @@
 
 with lib;
 
-{
+let
+
+  cfg = config.services.syncthing;
+
+in {
   meta.maintainers = [ maintainers.rycee ];
 
   options = {
     services.syncthing = {
       enable = mkEnableOption "Syncthing continuous file synchronization";
+
+      extraOptions = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "--gui-apikey=apiKey" ];
+        description = ''
+          Extra command-line arguments to pass to <command>syncthing</command>.
+        '';
+      };
 
       tray = mkOption {
         type = with types;
@@ -43,7 +56,7 @@ with lib;
   };
 
   config = mkMerge [
-    (mkIf config.services.syncthing.enable {
+    (mkIf cfg.enable {
       home.packages = [ (getOutput "man" pkgs.syncthing) ];
 
       systemd.user.services = {
@@ -57,7 +70,9 @@ with lib;
 
           Service = {
             ExecStart =
-              "${pkgs.syncthing}/bin/syncthing -no-browser -no-restart -logflags=0";
+              "${pkgs.syncthing}/bin/syncthing -no-browser -no-restart -logflags=0"
+              + optionalString (cfg.extraOptions != [ ])
+              (" " + escapeShellArgs cfg.extraOptions);
             Restart = "on-failure";
             SuccessExitStatus = [ 3 4 ];
             RestartForceExitStatus = [ 3 4 ];
@@ -77,49 +92,46 @@ with lib;
       };
     })
 
-    (mkIf (isAttrs config.services.syncthing.tray
-      && config.services.syncthing.tray.enable) {
-        systemd.user.services = {
-          ${config.services.syncthing.tray.package.pname} = {
-            Unit = {
-              Description = config.services.syncthing.tray.package.pname;
-              Requires = [ "tray.target" ];
-              After = [ "graphical-session-pre.target" "tray.target" ];
-              PartOf = [ "graphical-session.target" ];
-            };
-
-            Service = {
-              ExecStart =
-                "${config.services.syncthing.tray.package}/bin/${config.services.syncthing.tray.command}";
-            };
-
-            Install = { WantedBy = [ "graphical-session.target" ]; };
+    (mkIf (isAttrs cfg.tray && cfg.tray.enable) {
+      systemd.user.services = {
+        ${cfg.tray.package.pname} = {
+          Unit = {
+            Description = cfg.tray.package.pname;
+            Requires = [ "tray.target" ];
+            After = [ "graphical-session-pre.target" "tray.target" ];
+            PartOf = [ "graphical-session.target" ];
           };
+
+          Service = {
+            ExecStart = "${cfg.tray.package}/bin/${cfg.tray.command}";
+          };
+
+          Install = { WantedBy = [ "graphical-session.target" ]; };
         };
-      })
+      };
+    })
 
     # deprecated
-    (mkIf (isBool config.services.syncthing.tray
-      && config.services.syncthing.tray) {
-        systemd.user.services = {
-          "syncthingtray" = {
-            Unit = {
-              Description = "syncthingtray";
-              Requires = [ "tray.target" ];
-              After = [ "graphical-session-pre.target" "tray.target" ];
-              PartOf = [ "graphical-session.target" ];
-            };
-
-            Service = {
-              ExecStart = "${pkgs.syncthingtray-minimal}/bin/syncthingtray";
-            };
-
-            Install = { WantedBy = [ "graphical-session.target" ]; };
+    (mkIf (isBool cfg.tray && cfg.tray) {
+      systemd.user.services = {
+        "syncthingtray" = {
+          Unit = {
+            Description = "syncthingtray";
+            Requires = [ "tray.target" ];
+            After = [ "graphical-session-pre.target" "tray.target" ];
+            PartOf = [ "graphical-session.target" ];
           };
+
+          Service = {
+            ExecStart = "${pkgs.syncthingtray-minimal}/bin/syncthingtray";
+          };
+
+          Install = { WantedBy = [ "graphical-session.target" ]; };
         };
-        warnings = [
-          "Specifying 'services.syncthing.tray' as a boolean is deprecated, set 'services.syncthing.tray.enable' instead. See https://github.com/nix-community/home-manager/pull/1257."
-        ];
-      })
+      };
+      warnings = [
+        "Specifying 'services.syncthing.tray' as a boolean is deprecated, set 'services.syncthing.tray.enable' instead. See https://github.com/nix-community/home-manager/pull/1257."
+      ];
+    })
   ];
 }

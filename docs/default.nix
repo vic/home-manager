@@ -9,8 +9,8 @@ let
     name = "nmd";
     owner = "rycee";
     repo = "nmd";
-    rev = "527245ff605bde88c2dd2ddae21c6479bb7cf8aa";
-    sha256 = "1zi0f9y3wq4bpslx1py3sfgrgd9av41ahpandvs6rvkpisfsqqlp";
+    rev = "de522bdd533350b3afb41e1ce9b3afb72922fba2";
+    sha256 = "1ji4q7b48nnicgpnnl6yb9xb9zfkmmzkch4yifinphw3ag38qrmd";
   };
 
   nmd = import nmdSrc { inherit lib pkgs; };
@@ -117,4 +117,14 @@ in {
   manPages = docs.manPages;
 
   manual = { inherit (docs) html htmlOpenTool; };
+
+  # Unstable, mainly for CI.
+  jsonModuleMaintainers = pkgs.writeText "hm-module-maintainers.json" (let
+    result = lib.evalModules {
+      modules = import ../modules/modules.nix {
+        inherit lib pkgs;
+        check = false;
+      } ++ [ scrubbedPkgsModule ];
+    };
+  in builtins.toJSON result.config.meta.maintainers);
 }

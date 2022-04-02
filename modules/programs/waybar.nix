@@ -97,7 +97,8 @@ let
 
         modules = mkOption {
           type = jsonFormat.type;
-          default = { };
+          visible = false;
+          default = null;
           description = "Modules configuration.";
           example = literalExpression ''
             {
@@ -156,7 +157,7 @@ in {
     };
 
     settings = mkOption {
-      type = listOf waybarBarConfig;
+      type = either (listOf waybarBarConfig) (attrsOf waybarBarConfig);
       default = [ ];
       description = ''
         Configuration for Waybar, see <link
@@ -164,8 +165,8 @@ in {
         for supported values.
       '';
       example = literalExpression ''
-        [
-          {
+        {
+          mainBar = {
             layer = "top";
             position = "top";
             height = 30;
@@ -176,26 +177,39 @@ in {
             modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
             modules-center = [ "sway/window" "custom/hello-from-waybar" ];
             modules-right = [ "mpd" "custom/mymodule#with-css-id" "temperature" ];
-            modules = {
-              "sway/workspaces" = {
-                disable-scroll = true;
-                all-outputs = true;
-              };
-              "custom/hello-from-waybar" = {
-                format = "hello {}";
-                max-length = 40;
-                interval = "once";
-                exec = pkgs.writeShellScript "hello-from-waybar" '''
-                  echo "from within waybar"
-                ''';
-              };
+
+            "sway/workspaces" = {
+              disable-scroll = true;
+              all-outputs = true;
             };
-          }
-        ]
+            "custom/hello-from-waybar" = {
+              format = "hello {}";
+              max-length = 40;
+              interval = "once";
+              exec = pkgs.writeShellScript "hello-from-waybar" '''
+                echo "from within waybar"
+              ''';
+            };
+          };
+        }
       '';
     };
 
     systemd.enable = mkEnableOption "Waybar systemd integration";
+
+    systemd.target = mkOption {
+      type = str;
+      default = "graphical-session.target";
+      example = "sway-session.target";
+      description = ''
+        The systemd target that will automatically start the Waybar service.
+        </para>
+        <para>
+        When setting this value to <literal>"sway-session.target"</literal>,
+        make sure to also enable <option>wayland.windowManager.sway.systemdIntegration</option>,
+        otherwise the service may never be started.
+      '';
+    };
 
     style = mkOption {
       type = nullOr (either path str);
@@ -230,7 +244,7 @@ in {
   config = let
     # Removes nulls because Waybar ignores them.
     # This is not recursive.
-    removeNulls = filterAttrs (_: v: v != null);
+    removeTopLevelNulls = filterAttrs (_: v: v != null);
 
     # Makes the actual valid configuration Waybar accepts
     # (strips our custom settings before converting to JSON)
@@ -240,10 +254,17 @@ in {
         # as its descendants have to live at the top-level
         settingsWithoutModules = removeAttrs configuration [ "modules" ];
         settingsModules =
-          optionalAttrs (configuration.modules != { }) configuration.modules;
-      in removeNulls (settingsWithoutModules // settingsModules);
+          optionalAttrs (configuration.modules != null) configuration.modules;
+      in removeTopLevelNulls (settingsWithoutModules // settingsModules);
+
+    # Allow using attrs for settings instead of a list in order to more easily override
+    settings = if builtins.isAttrs cfg.settings then
+      lib.attrValues cfg.settings
+    else
+      cfg.settings;
+
     # The clean list of configurations
-    finalConfiguration = map makeConfiguration cfg.settings;
+    finalConfiguration = map makeConfiguration settings;
 
     configSource = jsonFormat.generate "waybar-config.json" finalConfiguration;
 
@@ -255,7 +276,7 @@ in {
         ({
           assertion =
             if lib.versionAtLeast config.home.stateVersion "22.05" then
-              all (x: !hasAttr "modules" x) cfg.settings
+              all (x: !hasAttr "modules" x || x.modules == null) settings
             else
               true;
           message = ''
@@ -267,7 +288,7 @@ in {
 
       home.packages = [ cfg.package ];
 
-      xdg.configFile."waybar/config" = mkIf (cfg.settings != [ ]) {
+      xdg.configFile."waybar/config" = mkIf (settings != [ ]) {
         source = configSource;
         onChange = ''
           ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
@@ -302,7 +323,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = { WantedBy = [ cfg.systemd.target ]; };
       };
     })
   ]);

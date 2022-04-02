@@ -32,6 +32,15 @@ in {
   options.programs.kitty = {
     enable = mkEnableOption "Kitty terminal emulator";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.kitty;
+      defaultText = literalExpression "pkgs.kitty";
+      description = ''
+        Kitty package to install.
+      '';
+    };
+
     darwinLaunchOptions = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
@@ -57,10 +66,22 @@ in {
       '';
       description = ''
         Configuration written to
-        <filename>~/.config/kitty/kitty.conf</filename>. See
+        <filename>$XDG_CONFIG_HOME/kitty/kitty.conf</filename>. See
         <link xlink:href="https://sw.kovidgoyal.net/kitty/conf.html" />
         for the documentation.
       '';
+    };
+
+    theme = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Apply a Kitty color theme. This option takes the friendly name of
+        any theme given by the command <command>kitty +kitten themes</command>.
+        See <link xlink:href="https://github.com/kovidgoyal/kitty-themes"/>
+        for more details.
+      '';
+      example = "Space Gray Eighties";
     };
 
     font = mkOption {
@@ -108,7 +129,7 @@ in {
       '';
     }];
 
-    home.packages = [ pkgs.kitty ] ++ optionalPackage cfg.font;
+    home.packages = [ cfg.package ] ++ optionalPackage cfg.font;
 
     xdg.configFile."kitty/kitty.conf" = {
       text = ''
@@ -119,6 +140,13 @@ in {
           font_family ${cfg.font.name}
           ${optionalString (cfg.font.size != null)
           "font_size ${toString cfg.font.size}"}
+        ''}
+
+        ${optionalString (cfg.theme != null) ''
+          include ${pkgs.kitty-themes}/${
+            (head (filter (x: x.name == cfg.theme) (builtins.fromJSON
+              (builtins.readFile "${pkgs.kitty-themes}/themes.json")))).file
+          }
         ''}
 
         ${toKittyConfig cfg.settings}

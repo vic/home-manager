@@ -11,6 +11,7 @@ _arguments \
   '--impure[impure]' \
   '--keep-failed[keep failed]' \
   '--keep-going[keep going]' \
+  '--version[version]' \
   '(-h --help)'{--help,-h}'[help]' \
   '(-v --verbose)'{--verbose,-v}'[verbose]' \
   '(-n --dry-run)'{--dry-run,-n}'[dry run]' \
@@ -19,6 +20,10 @@ _arguments \
   '--option[option]:NAME VALUE:()' \
   '--builders[builders]:SPEC:()' \
   '--show-trace[show trace]' \
+  '--override-input[override flake input]:NAME VALUE:()' \
+  '--update-input[update flake input]:NAME:()' \
+  '--experimental-features[set experimental Nix features]:VALUE:()' \
+  '--extra-experimental-features:[append to experimental Nix features]:VALUE:()' \
   '1: :->cmds' \
   '*:: :->args' && ret=0
 
@@ -56,7 +61,11 @@ case "$state" in
           '--option[option]:NAME VALUE:()' \
           '--show-trace[show trace]' \
           '--substitute[substitute]' \
-          '--builders[builders]:SPEC:()'
+          '--builders[builders]:SPEC:()' \
+          '--override-input[override flake input]:NAME VALUE:()' \
+          '--update-input[update flake input]:NAME:()' \
+          '--experimental-features[set experimental Nix features]:VALUE:()' \
+          '--extra-experimental-features:[append to experimental Nix features]:VALUE:()'
         ;;
     esac
 esac

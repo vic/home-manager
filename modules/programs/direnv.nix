@@ -29,7 +29,7 @@ in {
       default = { };
       description = ''
         Configuration written to
-        <filename>~/.config/direnv/config.toml</filename>.
+        <filename>$XDG_CONFIG_HOME/direnv/config.toml</filename>.
         </para><para>
         See
         <citerefentry>
@@ -45,7 +45,7 @@ in {
       default = "";
       description = ''
         Custom stdlib written to
-        <filename>~/.config/direnv/direnvrc</filename>.
+        <filename>$XDG_CONFIG_HOME/direnv/direnvrc</filename>.
       '';
     };
 
@@ -72,7 +72,11 @@ in {
       description = ''
         Whether to enable Fish integration. Note, enabling the direnv module
         will always active its functionality for Fish since the direnv package
-        automatically gets loaded in Fish.
+        automatically gets loaded in Fish. If this is not the case try adding
+        <programlisting language="nix">
+          environment.pathsToLink = [ "/share/fish" ];
+        </programlisting>
+        to the system configuration.
       '';
     };
 
@@ -108,5 +112,12 @@ in {
     programs.zsh.initExtra = mkIf cfg.enableZshIntegration ''
       eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
     '';
+
+    programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration (
+      # Using mkAfter to make it more likely to appear after other
+      # manipulations of the prompt.
+      mkAfter ''
+        ${pkgs.direnv}/bin/direnv hook fish | source
+      '');
   };
 }

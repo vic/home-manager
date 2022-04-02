@@ -898,7 +898,7 @@ in
 
           Note, on NixOS you may need to add
 
-              services.dbus.packages = with pkgs; [ gnome3.dconf ];
+              services.dbus.packages = with pkgs; [ dconf ];
 
           to the system configuration for this module to work as
           expected. In particular if you get the error message
@@ -2288,6 +2288,180 @@ in
           The 'lesskey' configuration file is now stored under
           '$XDG_CONFIG_HOME/lesskey' since it is fully supported upstream
           starting from v596.
+        '';
+      }
+
+      {
+        time = "2021-12-10T23:19:57+00:00";
+        message = ''
+          A new module is available: 'programs.sqls'.
+        '';
+      }
+
+      {
+        time = "2021-12-11T11:55:12+00:00";
+        message = ''
+          A new module is available: 'programs.navi'.
+        '';
+      }
+
+      {
+        time = "2021-12-11T16:07:00+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.gromit-mpx'.
+        '';
+      }
+
+      {
+        time = "2021-12-12T17:09:38+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.opensnitch-ui'.
+        '';
+      }
+
+      {
+        time = "2021-12-21T22:17:30+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.systembus-notify'.
+        '';
+      }
+
+      {
+        time = "2021-12-31T09:39:20+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'xsession.windowManager.herbstluftwm'.
+        '';
+      }
+
+      {
+        time = "2022-01-03T10:34:45+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.swayidle'.
+        '';
+      }
+
+      {
+        time = "2022-01-11T12:26:43+00:00";
+        message = ''
+          A new module is available: 'programs.sagemath'.
+        '';
+      }
+
+      {
+        time = "2022-01-22T14:36:25+00:00";
+        message = ''
+          A new module is available: 'programs.helix'.
+        '';
+      }
+
+      {
+        time = "2022-01-22T15:12:20+00:00";
+        message = ''
+          A new module is available: 'programs.watson'.
+        '';
+      }
+
+      {
+        time = "2022-01-22T15:33:42+00:00";
+        message = ''
+          A new module is available: 'programs.timidity'.
+        '';
+      }
+
+      {
+        time = "2022-01-22T16:54:31+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'programs.tint2'.
+        '';
+      }
+
+      {
+        time = "2022-01-22T17:39:20+00:00";
+        message = ''
+          A new module is available: 'programs.pandoc'.
+        '';
+      }
+
+      {
+        time = "2022-01-26T22:08:29+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'programs.kodi'.
+        '';
+      }
+
+      {
+        time = "2022-02-03T23:23:49+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.twmn'.
+        '';
+      }
+
+      {
+        time = "2022-02-16T23:50:35+00:00";
+        message = ''
+          A new module is available: 'programs.zellij'.
+        '';
+      }
+
+      {
+        time = "2022-02-17T17:12:46+00:00";
+        message = ''
+          A new module is available: 'programs.eww'.
+        '';
+      }
+
+      {
+        time = "2022-02-17T23:11:13+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.espanso'.
+        '';
+      }
+
+      {
+        time = "2022-02-24T22:35:22+00:00";
+        message = ''
+          A new module is available: 'programs.gitui'.
+        '';
+      }
+
+      {
+        time = "2022-02-26T09:28:57+00:00";
+        condition = hostPlatform.isDarwin;
+        message = ''
+          A new module is available: 'launchd.agents'
+
+          Use this to enable services based on macOS LaunchAgents.
+        '';
+      }
+
+      {
+        time = "2022-03-06T08:50:32+00:00";
+        message = ''
+          A new module is available: 'programs.just'.
+        '';
+      }
+
+      {
+        time = "2022-03-06T09:40:17+00:00";
+        message = ''
+          A new module is available: 'programs.pubs'.
+        '';
+      }
+
+      {
+        time = "2022-03-13T20:59:38+00:00";
+        condition = hostPlatform.isLinux;
+        message = ''
+          A new module is available: 'services.fusuma'.
         '';
       }
     ];

@@ -7,7 +7,9 @@
 /modules/i18n/input-method                            @Kranzes
 /tests/modules/i18n/input-method                      @Kranzes
 
-/modules/misc/dconf.nix                               @gnidorah @rycee
+/modules/launchd                                      @midchildan
+
+/modules/misc/dconf.nix                               @rycee
 
 /modules/misc/fontconfig.nix                          @rycee
 /tests/modules/misc/fontconfig                        @rycee
@@ -18,6 +20,9 @@
 /tests/modules/config/i18n                            @midchildan
 
 /modules/misc/news.nix                                @rycee
+
+/modules/misc/nix.nix                                 @polykernel
+/tests/modules/misc/nix                               @polykernel
 
 /modules/misc/nixpkgs-disabled.nix                    @thiagokokada
 
@@ -76,6 +81,8 @@
 
 /modules/programs/emacs.nix                           @rycee
 
+/modules/programs/eww.nix                             @mainrs
+
 /modules/programs/exa.nix                             @kalhauge
 
 /modules/programs/firefox.nix                         @rycee
@@ -83,16 +90,25 @@
 /modules/programs/foot.nix                            @plabadens
 /tests/modules/programs/foot                          @plabadens
 
+/modules/services/fusuma.nix                          @iosmanthus
+/tests/modules/services/fusuma                        @iosmanthus
+
 /modules/programs/gh.nix                              @Gerschtli @berbiche
 /tests/modules/programs/gh                            @Gerschtli @berbiche
 
 /modules/programs/git.nix                             @rycee
 
+/modules/programs/gitui/gitui.nix                     @mifom
+/modules/programs/gitui/default_key_config.ron        @mifom
+
 /modules/programs/gnome-terminal.nix                  @kamadorueda @rycee
 
 /modules/programs/go.nix                              @rvolosatovs
 
-/modules/programs/hexchat.nix                         @superherointj @thiagokokada
+/modules/programs/helix.nix                           @Philipp-M
+/tests/modules/programs/helix                         @Philipp-M
+
+/modules/programs/hexchat.nix                         @thiagokokada
 /tests/modules/programs/hexchat                       @thiagokokada
 
 /modules/programs/himalaya.nix                        @ambroisie
@@ -109,7 +125,12 @@
 
 /modules/programs/java.nix                            @ShamrockLee
 
+/modules/programs/just.nix                            @maximsmol
+
 /modules/programs/keychain.nix                        @marsam
+
+/modules/programs/kodi.nix                            @dwagenk
+/tests/modules/programs/kodi                          @dwagenk
 
 /modules/programs/lazygit.nix                         @kalhauge
 
@@ -139,6 +160,8 @@
 /tests/modules/programs/mpv                           @thiagokokada
 
 /modules/programs/mu.nix                              @KarlJoad
+
+/modules/programs/navi.nix                            @marsam
 
 /modules/programs/ncmpcpp.nix                         @olmokramer
 /tests/modules/programs/ncmpcpp                       @olmokramer
@@ -171,6 +194,9 @@
 
 /modules/programs/openssh.nix                         @rycee
 
+/modules/programs/pandoc.nix                          @kirelagin
+/tests/modules/programs/pandoc                        @kirelagin
+
 /modules/programs/password-store.nix                  @pacien
 
 /modules/programs/pazi.nix                            @marsam
@@ -180,6 +206,9 @@
 /modules/programs/piston-cli.nix                      @ethancedwards8
 
 /modules/programs/powerline-go.nix                    @DamienCassou
+
+/modules/programs/pubs.nix                            @loicreynier
+/tests/modules/programs/pubs                          @loicreynier
 
 /modules/programs/rbw.nix                             @ambroisie
 /tests/modules/programs/rbw                           @ambroisie
@@ -192,6 +221,9 @@
 
 /modules/programs/rtorrent.nix                        @marsam
 
+/modules/programs/sagemath.nix                        @kirelagin
+/tests/modules/programs/sagemath                      @kirelagin
+
 /modules/programs/sbt.nix                             @kubukoz
 /tests/modules/programs/sbt                           @kubukoz
 
@@ -203,6 +235,8 @@
 /modules/programs/sm64ex.nix                          @ivarwithoutbones
 /tests/modules/programs/sm64ex                        @ivarwithoutbones
 
+/modules/programs/sqls.nix                            @marsam
+
 /modules/programs/ssh.nix                             @rycee
 
 /modules/programs/starship.nix                        @marsam
@@ -211,8 +245,15 @@
 
 /modules/programs/texlive.nix                         @rycee
 
+/modules/programs/timidity.nix                        @amesgen
+
+/modules/programs/tiny.nix                            @kmaasrud
+
 /modules/programs/topgrade.nix                        @msfjarvis
 /tests/modules/programs/topgrade                      @msfjarvis
+
+/mdules/programs/watson.nix                           @polykernel
+/tests/modules/programs/watson                        @polykernel
 
 /modules/programs/waybar.nix                          @berbiche
 /tests/modules/programs/waybar                        @berbiche
@@ -223,6 +264,8 @@
 /modules/programs/z-lua.nix                           @marsam
 
 /modules/programs/zathura.nix                         @rprospero
+
+/modules/programs/zellij.nix                          @mainrs
 
 /modules/programs/zoxide.nix                          @marsam
 
@@ -253,6 +296,8 @@
 
 /modules/services/etesync-dav.nix                     @Valodim
 
+/modules/services/espanso.nix                         @lucasew
+
 /modules/services/flameshot.nix                       @moredhel
 
 /modules/services/fluidsynth.nix                      @Valodim
@@ -267,6 +312,12 @@
 /modules/services/gpg-agent.nix                       @rycee
 
 /modules/services/grobi.nix                           @mbrgm
+
+/modules/services/gromit-mpx.nix                      @pjones
+/tests/modules/services/gromit-mpx                    @pjones
+
+/modules/services/home-manager-auto-upgrade.nix       @pinage404
+/tests/modules/services/home-manager-auto-upgrade     @pinage404
 
 /modules/services/hound.nix                           @adisbladis
 
@@ -296,6 +347,8 @@
 /modules/services/network-manager-applet.nix          @rycee
 
 /modules/services/notify-osd.nix                      @imalison
+
+/modules/services/opensnitch-ui.nix                   @onny
 
 /modules/services/pantalaimon.nix                     @jojosch
 /tests/modules/services/pantalaimon                   @jojosch
@@ -341,6 +394,9 @@
 /modules/services/trayer.nix                          @AndreasMager
 /tests/modules/services/trayer                        @AndreasMager
 
+/modules/services/twmn.nix                            @Austreelis
+/tests/modules/services/twmn                          @Austreelis
+
 /modules/services/udiskie.nix                         @rycee
 
 /modules/services/unison.nix                          @pacien
@@ -348,13 +404,16 @@
 /modules/services/window-managers/bspwm               @ncfavier
 /tests/modules/services/window-managers/bspwm         @ncfavier
 
-/modules/services/window-managers/i3-sway/i3.nix      @sumnerevans
-/tests/modules/services/window-managers/i3            @sumnerevans
+/modules/services/window-managers/herbstluftwm        @olmokramer
+/tests/modules/services/window-managers/herbstluftwm  @olmokramer
 
-/modules/services/window-managers/i3-sway/lib         @sumnerevans
+/modules/services/window-managers/i3-sway/i3.nix      @sumnerevans @sebtm
+/tests/modules/services/window-managers/i3            @sumnerevans @sebtm
 
-/modules/services/window-managers/i3-sway/sway.nix    @alexarice @sumnerevans
-/tests/modules/services/window-managers/sway          @sumnerevans
+/modules/services/window-managers/i3-sway/lib         @sumnerevans @sebtm
+
+/modules/services/window-managers/i3-sway/sway.nix    @alexarice @sumnerevans @sebtm
+/tests/modules/services/window-managers/sway          @sumnerevans @sebtm
 
 /modules/services/window-managers/i3-sway/swaynag.nix @polykernel
 
@@ -381,7 +440,18 @@
 
 /modules/services/volnoti.nix                         @IvanMalison
 
+/modules/services/systembus-notify.nix                @asymmetric
+
 /modules/targets/darwin                               @midchildan
 /tests/modules/targets-darwin                         @midchildan
 
+/modules/programs/tint2.nix                           @CarlosLoboxyz
+
 Makefile                                              @thiagokokada
+
+/modules/services/swayidle.nix                        @c0deaddict
+/tests/modules/services/swayidle                      @c0deaddict
+
+/modules/programs/ion.nix                             @jo1gi
+
+/modules/services/plex-mpv-shim.nix                   @starcraft66
