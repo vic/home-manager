@@ -285,6 +285,9 @@ in {
     {
       home.packages = [ cfg.package ];
 
+      # Support completion for `man` by building a cache for `apropos`.
+      programs.man.generateCaches = mkDefault true;
+
       xdg.dataFile."fish/home-manager_generated_completions".source = let
         # paths later in the list will overwrite those already linked
         destructiveSymlinkJoin = args_@{ name, paths, preferLocalBuild ? true
@@ -307,7 +310,7 @@ in {
         generateCompletions = package:
           pkgs.runCommand "${package.name}-fish-completions" {
             src = package;
-            nativeBuildInputs = [ pkgs.python2 ];
+            nativeBuildInputs = [ pkgs.python3 ];
             buildInputs = [ cfg.package ];
             preferLocalBuild = true;
           } ''

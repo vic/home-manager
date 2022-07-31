@@ -6,11 +6,16 @@ using the [Nix][] package manager together with the Nix libraries
 found in [Nixpkgs][]. It allows declarative configuration of user
 specific (non global) packages and dotfiles.
 
+Usage
+-----
+
 Before attempting to use Home Manager please read the warning below.
 
-For a more systematic overview of Home Manager and its available
-options, please see the Home Manager [manual][manual] and
-[options][configuration options].
+For a systematic overview of Home Manager and its available options,
+please see
+
+- the [Home Manager manual][manual] and
+- the [Home Manager configuration options][configuration options].
 
 If you would like to contribute to Home Manager
 then please have a look at the [contributing][] chapter of the manual.
@@ -36,14 +41,14 @@ will write to your dconf store and cannot tell whether a configuration
 that it is about to be overwritten was from a previous Home Manager
 generation or from manual configuration.
 
-Home Manager targets [NixOS][] unstable and NixOS version 21.11 (the
+Home Manager targets [NixOS][] unstable and NixOS version 22.05 (the
 current stable version), it may or may not work on other Linux
 distributions and NixOS versions.
 
 Also, the `home-manager` tool does not explicitly support rollbacks at
 the moment so if your home directory gets messed up you'll have to fix
-it yourself. See the [rollbacks](#rollbacks) section for instructions
-on how to manually perform a rollback.
+it yourself. See the [rollbacks][] section for instructions on how to
+manually perform a rollback.
 
 Now when your expectations have been built up and you are eager to try
 all this out you can go ahead and read the rest of this text.
@@ -101,7 +106,7 @@ Home Manager is developed against `nixpkgs-unstable` branch, which
 often causes it to contain tweaks for changes/packages not yet
 released in stable NixOS. To avoid breaking users' configurations,
 Home Manager is released in branches corresponding to NixOS releases
-(e.g. `release-21.11`). These branches get fixes, but usually not new
+(e.g. `release-22.05`). These branches get fixes, but usually not new
 modules. If you need a module to be backported, then feel free to open
 an issue.
 
@@ -110,19 +115,20 @@ License
 
 This project is licensed under the terms of the [MIT license](LICENSE).
 
-[Nix]: https://nixos.org/nix/
+[Nix]: https://nixos.org/explore.html
 [NixOS]: https://nixos.org/
-[Nixpkgs]: https://nixos.org/nixpkgs/
-[manual]: https://nix-community.github.io/home-manager/
+[Nixpkgs]: https://github.com/NixOS/nixpkgs
+[manual]: https://nix-community.github.io/home-manager/index.html
 [contributing]: https://nix-community.github.io/home-manager/#ch-contributing
 [manual usage]: https://nix-community.github.io/home-manager/#ch-usage
 [configuration options]: https://nix-community.github.io/home-manager/options.html
 [#home-manager]: https://webchat.oftc.net/?channels=home-manager
 [OFTC]: https://oftc.net/
-[Nix Pills]: https://nixos.org/nixos/nix-pills/
+[Nix Pills]: https://nixos.org/guides/nix-pills/
 [Nix Flakes]: https://nixos.wiki/wiki/Flakes
-[nix-darwin]: https://github.com/LnL7/nix-darwin/
+[nix-darwin]: https://github.com/LnL7/nix-darwin
 [manual standalone install]: https://nix-community.github.io/home-manager/index.html#sec-install-standalone
 [manual nixos install]: https://nix-community.github.io/home-manager/index.html#sec-install-nixos-module
 [manual nix-darwin install]: https://nix-community.github.io/home-manager/index.html#sec-install-nix-darwin-module
 [manual nix flakes]: https://nix-community.github.io/home-manager/index.html#ch-nix-flakes
+[rollbacks]: https://nix-community.github.io/home-manager/index.html#sec-usage-rollbacks

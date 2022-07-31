@@ -1,7 +1,5 @@
 theme = "base16"
 
-[keys]
-[keys.normal]
 [keys.normal.space]
 q = ":q"
 space = "file_picker"

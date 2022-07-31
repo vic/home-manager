@@ -4,10 +4,9 @@ let
 
   lib = import ../modules/lib/stdlib-extended.nix pkgs.lib;
 
-  nmt = pkgs.fetchFromGitLab {
-    owner = "rycee";
-    repo = "nmt";
-    rev = "d83601002c99b78c89ea80e5e6ba21addcfe12ae";
+  nmt = fetchTarball {
+    url =
+      "https://gitlab.com/api/v4/projects/rycee%2Fnmt/repository/archive.tar.gz?sha=d83601002c99b78c89ea80e5e6ba21addcfe12ae";
     sha256 = "1xzwwxygzs1cmysg97hzd285r7n1g1lwx5y1ar68gwq07a1rczmv";
   };
 
@@ -16,11 +15,18 @@ let
     check = false;
   } ++ [
     {
+      # Bypass <nixpkgs> reference inside modules/modules.nix to make the test
+      # suite more pure.
+      _module.args.pkgsPath = pkgs.path;
+
       # Fix impurities. Without these some of the user's environment
       # will leak into the tests through `builtins.getEnv`.
       xdg.enable = true;
-      home.username = "hm-user";
-      home.homeDirectory = "/home/hm-user";
+      home = {
+        username = "hm-user";
+        homeDirectory = "/home/hm-user";
+        stateVersion = lib.mkDefault "18.09";
+      };
 
       # Avoid including documentation since this will cause
       # unnecessary rebuilds of the tests.
@@ -46,6 +52,7 @@ import nmt {
     ./modules/home-environment
     ./modules/misc/fontconfig
     ./modules/misc/nix
+    ./modules/misc/specialization
     ./modules/programs/alacritty
     ./modules/programs/alot
     ./modules/programs/aria2
@@ -76,8 +83,10 @@ import nmt {
     ./modules/programs/lieer
     ./modules/programs/man
     ./modules/programs/mbsync
+    ./modules/programs/micro
     ./modules/programs/mpv
     ./modules/programs/mu
+    ./modules/programs/mujmap
     ./modules/programs/ncmpcpp
     ./modules/programs/ne
     ./modules/programs/neomutt
@@ -87,6 +96,7 @@ import nmt {
     ./modules/programs/nushell
     ./modules/programs/pandoc
     ./modules/programs/pet
+    ./modules/programs/pistol
     ./modules/programs/powerline-go
     ./modules/programs/pubs
     ./modules/programs/qutebrowser
@@ -134,6 +144,7 @@ import nmt {
     ./modules/programs/rbw
     ./modules/programs/rofi
     ./modules/programs/rofi-pass
+    ./modules/programs/swaylock
     ./modules/programs/terminator
     ./modules/programs/waybar
     ./modules/programs/xmobar
@@ -152,11 +163,15 @@ import nmt {
     ./modules/services/home-manager-auto-upgrade
     ./modules/services/kanshi
     ./modules/services/lieer
+    ./modules/services/mopidy
     ./modules/services/mpd
+    ./modules/services/mpdris2
     ./modules/services/pantalaimon
     ./modules/services/pbgopy
+    ./modules/services/picom
     ./modules/services/playerctld
     ./modules/services/polybar
+    ./modules/services/recoll
     ./modules/services/redshift-gammastep
     ./modules/services/screen-locker
     ./modules/services/swayidle
@@ -167,6 +182,7 @@ import nmt {
     ./modules/services/window-managers/bspwm
     ./modules/services/window-managers/herbstluftwm
     ./modules/services/window-managers/i3
+    ./modules/services/window-managers/spectrwm
     ./modules/services/window-managers/sway
     ./modules/services/wlsunset
     ./modules/services/xsettingsd

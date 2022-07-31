@@ -15,6 +15,7 @@ let
 
   modules = [
     ./accounts/email.nix
+    ./config/home-cursor.nix
     ./config/i18n.nix
     ./files.nix
     ./home-environment.nix
@@ -30,6 +31,7 @@ let
     ./misc/numlock.nix
     ./misc/pam.nix
     ./misc/qt.nix
+    ./misc/specialization.nix
     ./misc/submodule-support.nix
     ./misc/tmpfiles.nix
     ./misc/version.nix
@@ -96,6 +98,7 @@ let
     ./programs/less.nix
     ./programs/lesspipe.nix
     ./programs/lf.nix
+    ./programs/librewolf.nix
     ./programs/lieer.nix
     ./programs/lsd.nix
     ./programs/man.nix
@@ -104,9 +107,11 @@ let
     ./programs/mbsync.nix
     ./programs/mcfly.nix
     ./programs/mercurial.nix
+    ./programs/micro.nix
     ./programs/mpv.nix
     ./programs/msmtp.nix
     ./programs/mu.nix
+    ./programs/mujmap.nix
     ./programs/navi.nix
     ./programs/ncmpcpp.nix
     ./programs/ncspot.nix
@@ -128,9 +133,11 @@ let
     ./programs/pazi.nix
     ./programs/pet.nix
     ./programs/pidgin.nix
+    ./programs/pistol.nix
     ./programs/piston-cli.nix
     ./programs/powerline-go.nix
     ./programs/pubs.nix
+    ./programs/pylint.nix
     ./programs/qutebrowser.nix
     ./programs/rbw.nix
     ./programs/readline.nix
@@ -141,12 +148,15 @@ let
     ./programs/sbt.nix
     ./programs/scmpuff.nix
     ./programs/senpai.nix
+    ./programs/sioyek.nix
     ./programs/skim.nix
     ./programs/sm64ex.nix
     ./programs/sqls.nix
     ./programs/ssh.nix
     ./programs/starship.nix
+    ./programs/swaylock.nix
     ./programs/taskwarrior.nix
+    ./programs/tealdeer.nix
     ./programs/terminator.nix
     ./programs/termite.nix
     ./programs/texlive.nix
@@ -159,6 +169,7 @@ let
     ./programs/vim.nix
     ./programs/vscode.nix
     ./programs/vscode/haskell.nix
+    ./programs/pywal.nix
     ./programs/watson.nix
     ./programs/waybar.nix
     ./programs/xmobar.nix
@@ -175,7 +186,6 @@ let
     ./services/caffeine.nix
     ./services/cbatticon.nix
     ./services/clipmenu.nix
-    ./services/compton.nix
     ./services/devilspie2.nix
     ./services/dropbox.nix
     ./services/dunst.nix
@@ -207,8 +217,10 @@ let
     ./services/lorri.nix
     ./services/mako.nix
     ./services/mbsync.nix
+    ./services/mopidy.nix
     ./services/mpd.nix
     ./services/mpdris2.nix
+    ./services/mpd-discord-rpc.nix
     ./services/mpris-proxy.nix
     ./services/muchsync.nix
     ./services/network-manager-applet.nix
@@ -230,10 +242,12 @@ let
     ./services/poweralertd.nix
     ./services/pulseeffects.nix
     ./services/random-background.nix
+    ./services/recoll.nix
     ./services/redshift-gammastep/gammastep.nix
     ./services/redshift-gammastep/redshift.nix
     ./services/rsibreak.nix
     ./services/screen-locker.nix
+    ./services/sctd.nix
     ./services/spotifyd.nix
     ./services/stalonetray.nix
     ./services/status-notifier-watcher.nix
@@ -256,6 +270,7 @@ let
     ./services/window-managers/i3-sway/i3.nix
     ./services/window-managers/i3-sway/sway.nix
     ./services/window-managers/i3-sway/swaynag.nix
+    ./services/window-managers/spectrwm.nix
     ./services/window-managers/xmonad.nix
     ./services/wlsunset.nix
     ./services/xcape.nix
@@ -267,7 +282,6 @@ let
     ./systemd.nix
     ./targets/darwin
     ./targets/generic-linux.nix
-    ./xcursor.nix
     ./xresources.nix
     ./xsession.nix
     ./misc/nix.nix

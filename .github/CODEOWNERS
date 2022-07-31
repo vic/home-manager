@@ -2,6 +2,13 @@
 
 /flake.nix                                            @bqv @kisik21
 
+Makefile                                              @thiagokokada
+
+/modules/config/home-cursor.nix                       @polykernel @league
+
+/modules/config/i18n.nix                              @midchildan
+/tests/modules/config/i18n                            @midchildan
+
 /modules/home-environment.nix                         @rycee
 
 /modules/i18n/input-method                            @Kranzes
@@ -15,9 +22,6 @@
 /tests/modules/misc/fontconfig                        @rycee
 
 /modules/misc/gtk.nix                                 @rycee
-
-/modules/config/i18n.nix                              @midchildan
-/tests/modules/config/i18n                            @midchildan
 
 /modules/misc/news.nix                                @rycee
 
@@ -123,6 +127,8 @@
 
 /modules/programs/i3status-rust.nix                   @workflow
 
+/modules/programs/ion.nix                             @jo1gi
+
 /modules/programs/java.nix                            @ShamrockLee
 
 /modules/programs/just.nix                            @maximsmol
@@ -142,6 +148,8 @@
 /modules/programs/lf.nix                              @owm111
 /tests/modules/programs/lf                            @owm111
 
+/modules/programs/librewolf.nix                       @onny
+
 /modules/programs/lieer.nix                           @tadfisher
 
 /modules/programs/lsd.nix                             @marsam
@@ -156,10 +164,16 @@
 
 /modules/programs/mcfly.nix                           @marsam
 
+/modules/programs/micro.nix                           @MForster
+/tests/modules/programs/micro                         @MForster
+
 /modules/programs/mpv.nix                             @tadeokondrak @thiagokokada
 /tests/modules/programs/mpv                           @thiagokokada
 
 /modules/programs/mu.nix                              @KarlJoad
+
+/modules/programs/mujmap.nix                          @elizagamedev
+/tests/modules/programs/mujmap                        @elizagamedev
 
 /modules/programs/navi.nix                            @marsam
 
@@ -203,12 +217,17 @@
 
 /modules/programs/pidgin.nix                          @rycee
 
+/modules/programs/pistol.nix                          @mtoohey31
+/tests/modules/programs/pistol                        @mtoohey31
+
 /modules/programs/piston-cli.nix                      @ethancedwards8
 
 /modules/programs/powerline-go.nix                    @DamienCassou
 
 /modules/programs/pubs.nix                            @loicreynier
 /tests/modules/programs/pubs                          @loicreynier
+
+/modules/programs/pylint.nix                          @florpe
 
 /modules/programs/rbw.nix                             @ambroisie
 /tests/modules/programs/rbw                           @ambroisie
@@ -232,6 +251,8 @@
 
 /modules/programs/senpai.nix                          @malte-v
 
+/modules/programs/sioyek.nix                          @podocarp
+
 /modules/programs/sm64ex.nix                          @ivarwithoutbones
 /tests/modules/programs/sm64ex                        @ivarwithoutbones
 
@@ -241,11 +262,18 @@
 
 /modules/programs/starship.nix                        @marsam
 
+/modules/programs/swaylock.nix                        @rcerc
+/tests/modules/programs/swaylock                      @rcerc
+
+/modules/programs/tealdeer.nix                        @marsam
+
 /modules/programs/terminator.nix                      @chisui
 
 /modules/programs/texlive.nix                         @rycee
 
 /modules/programs/timidity.nix                        @amesgen
+
+/modules/programs/tint2.nix                           @CarlosLoboxyz
 
 /modules/programs/tiny.nix                            @kmaasrud
 
@@ -338,7 +366,12 @@
 
 /modules/services/mbsync.nix                          @pjones
 
+/modules/services/mopidy.nix                          @foo-dogsquared
+/tests/modules/services/mopidy                        @foo-dogsquared
+
 /modules/services/mpdris2.nix                         @pjones
+
+/modules/services/mpd-discord-rpc.nix                 @Kranzes
 
 /modules/services/mpris-proxy.nix                     @ThibautMarty
 
@@ -361,6 +394,9 @@
 
 /modules/services/pasystray.nix                       @pltanton
 
+/modules/services/picom.nix                           @thiagokokada
+/tests/modules/services/picom                         @thiagokokada
+
 /modules/services/pbgopy.nix                          @ivarwithoutbones
 /tests/modules/services/pbgopy                        @ivarwithoutbones
 
@@ -369,21 +405,33 @@
 /modules/services/playerctld.nix                      @fendse
 /tests/modules/playerctld                             @fendse
 
+/modules/services/plex-mpv-shim.nix                   @starcraft66
+
 /modules/services/poweralertd.nix                     @ThibautMarty
 
 /modules/services/pulseeffects.nix                    @jonringer
 
 /modules/services/random-background.nix               @rycee
 
+/modules/services/recoll.nix                          @foo-dogsquared
+/tests/modules/recoll                                 @foo-dogsquared
+
 /modules/services/redshift-gammastep                  @rycee @petabyteboy @thiagokokada
 /tests/modules/redshift-gammastep                     @thiagokokada
 
-/modules/services/screen-locker.nix                   @jrobsonchase
-/tests/modules/services/screen-locker                 @jrobsonchase
+/modules/services/screen-locker.nix                   @jrobsonchase @rszamszur
+/tests/modules/services/screen-locker                 @jrobsonchase @rszamszur
+
+/modules/services/sctd.nix                            @somasis
 
 /modules/services/status-notifier-watcher.nix         @pltanton
 
+/modules/services/swayidle.nix                        @c0deaddict
+/tests/modules/services/swayidle                      @c0deaddict
+
 /modules/services/syncthing.nix                       @rycee
+
+/modules/services/systembus-notify.nix                @asymmetric
 
 /modules/services/taffybar.nix                        @rycee
 
@@ -401,6 +449,8 @@
 
 /modules/services/unison.nix                          @pacien
 
+/modules/services/volnoti.nix                         @IvanMalison
+
 /modules/services/window-managers/bspwm               @ncfavier
 /tests/modules/services/window-managers/bspwm         @ncfavier
 
@@ -417,6 +467,9 @@
 
 /modules/services/window-managers/i3-sway/swaynag.nix @polykernel
 
+/modules/services/window-managers/spectrwm            @loicreynier
+/tests/modules/services/window-managers/spectrwm      @loicreynier
+
 /modules/services/wlsunset.nix                        @matrss
 /tests/modules/services/wlsunset                      @matrss
 
@@ -432,26 +485,9 @@
 
 /modules/systemd.nix                                  @rycee
 
-/modules/xcursor.nix                                  @league
+/modules/targets/darwin                               @midchildan
+/tests/modules/targets-darwin                         @midchildan
 
 /modules/xresources.nix                               @rycee
 
 /modules/xsession.nix                                 @rycee
-
-/modules/services/volnoti.nix                         @IvanMalison
-
-/modules/services/systembus-notify.nix                @asymmetric
-
-/modules/targets/darwin                               @midchildan
-/tests/modules/targets-darwin                         @midchildan
-
-/modules/programs/tint2.nix                           @CarlosLoboxyz
-
-Makefile                                              @thiagokokada
-
-/modules/services/swayidle.nix                        @c0deaddict
-/tests/modules/services/swayidle                      @c0deaddict
-
-/modules/programs/ion.nix                             @jo1gi
-
-/modules/services/plex-mpv-shim.nix                   @starcraft66

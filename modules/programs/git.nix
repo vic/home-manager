@@ -239,6 +239,44 @@ in {
         };
       };
 
+      difftastic = {
+        enable = mkEnableOption "" // {
+          description = ''
+            Enable the <command>difft</command> syntax highlighter.
+            See <link xlink:href="https://github.com/Wilfred/difftastic" />.
+          '';
+        };
+
+        background = mkOption {
+          type = types.enum [ "light" "dark" ];
+          default = "light";
+          example = "dark";
+          description = ''
+            Determines whether difftastic should use the lighter or darker colors
+            for syntax highlithing.
+          '';
+        };
+
+        color = mkOption {
+          type = types.enum [ "always" "auto" "never" ];
+          default = "auto";
+          example = "always";
+          description = ''
+            Determines when difftastic should color its output.
+          '';
+        };
+
+        display = mkOption {
+          type =
+            types.enum [ "side-by-side" "side-by-side-show-both" "inline" ];
+          default = "side-by-side";
+          example = "inline";
+          description = ''
+            Determines how the output displays - in one column or two columns.
+          '';
+        };
+      };
+
       delta = {
         enable = mkEnableOption "" // {
           description = ''
@@ -268,12 +306,79 @@ in {
           '';
         };
       };
+
+      diff-so-fancy = {
+        enable = mkEnableOption "" // {
+          description = ''
+            Enable the <command>diff-so-fancy</command> diff colorizer.
+            See <link xlink:href="https://github.com/so-fancy/diff-so-fancy" />.
+          '';
+        };
+
+        markEmptyLines = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Whether the first block of an empty line should be colored.
+          '';
+        };
+
+        changeHunkIndicators = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Simplify git header chunks to a more human readable format.
+          '';
+        };
+
+        stripLeadingSymbols = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Whether the <literal>+</literal> or <literal>-</literal> at
+            line-start should be removed.
+          '';
+        };
+
+        useUnicodeRuler = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            By default, the separator for the file header uses Unicode
+            line-drawing characters. If this is causing output errors on
+            your terminal, set this to false to use ASCII characters instead.
+          '';
+        };
+
+        rulerWidth = mkOption {
+          type = types.nullOr types.int;
+          default = null;
+          example = false;
+          description = ''
+            By default, the separator for the file header spans the full
+            width of the terminal. Use this setting to set the width of
+            the file header manually.
+          '';
+        };
+      };
     };
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
       home.packages = [ cfg.package ];
+      assertions = [{
+        assertion = let
+          enabled =
+            [ cfg.delta.enable cfg.diff-so-fancy.enable cfg.difftastic.enable ];
+        in count id enabled <= 1;
+        message =
+          "Only one of 'programs.git.delta.enable' or 'programs.git.difftastic.enable' or 'programs.git.diff-so-fancy.enable' can be set to true at the same time.";
+      }];
 
       programs.git.iniContent.user = {
         name = mkIf (cfg.userName != null) cfg.userName;
@@ -377,6 +482,22 @@ in {
         };
     })
 
+    (mkIf cfg.difftastic.enable {
+      home.packages = [ pkgs.difftastic ];
+
+      programs.git.iniContent = let
+        difftCommand = concatStringsSep " " [
+          "${pkgs.difftastic}/bin/difft"
+          "--color ${cfg.difftastic.color}"
+          "--background ${cfg.difftastic.background}"
+          "--display ${cfg.difftastic.display}"
+        ];
+      in {
+        diff.external = difftCommand;
+        core.pager = "${pkgs.less}/bin/less -XF";
+      };
+    })
+
     (mkIf cfg.delta.enable {
       home.packages = [ pkgs.delta ];
 
@@ -386,6 +507,25 @@ in {
         interactive.diffFilter = "${deltaCommand} --color-only";
         delta = cfg.delta.options;
       };
+    })
+
+    (mkIf cfg.diff-so-fancy.enable {
+      home.packages = [ pkgs.diff-so-fancy ];
+
+      programs.git.iniContent =
+        let dsfCommand = "${pkgs.diff-so-fancy}/bin/diff-so-fancy";
+        in {
+          core.pager = "${dsfCommand} | ${pkgs.less}/bin/less --tabs=4 -RFX";
+          interactive.diffFilter = "${dsfCommand} --patch";
+          diff-so-fancy = {
+            markEmptyLines = cfg.diff-so-fancy.markEmptyLines;
+            changeHunkIndicators = cfg.diff-so-fancy.changeHunkIndicators;
+            stripLeadingSymbols = cfg.diff-so-fancy.stripLeadingSymbols;
+            useUnicodeRuler = cfg.diff-so-fancy.useUnicodeRuler;
+            rulerWidth = mkIf (cfg.diff-so-fancy.rulerWidth != null)
+              (cfg.diff-so-fancy.rulerWidth);
+          };
+        };
     })
   ]);
 }

@@ -660,7 +660,7 @@ in
     lib.bash.initHomeManagerLib =
       let
         domainDir = pkgs.runCommand "hm-modules-messages" {
-          nativeBuildInputs = [ pkgs.gettext ];
+          nativeBuildInputs = [ pkgs.buildPackages.gettext ];
         } ''
           for path in ${./po}/*.po; do
             lang="''${path##*/}"

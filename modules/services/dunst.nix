@@ -13,7 +13,7 @@ let
     mkKeyValue = key: value:
       let
         value' = if isBool value then
-          (if value then "yes" else "no")
+          (lib.hm.booleans.yesNo value)
         else if isString value then
           ''"${value}"''
         else
@@ -108,7 +108,10 @@ in {
         example = literalExpression ''
           {
             global = {
-              geometry = "300x5-30+50";
+              width = 300;
+              height = 300;
+              offset = "30x50";
+              origin = "top-right";
               transparency = 10;
               frame_color = "#eceff1";
               font = "Droid Sans 9";

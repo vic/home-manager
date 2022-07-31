@@ -18,9 +18,7 @@ let
     rec {
       int = toString option;
       float = int;
-
-      bool = if option then "yes" else "no";
-
+      bool = lib.hm.booleans.yesNo option;
       string = option;
     }.${typeOf option};
 
@@ -79,7 +77,7 @@ in {
       };
 
       scripts = mkOption {
-        type = with types; listOf (either package str);
+        type = with types; listOf package;
         default = [ ];
         example = literalExpression "[ pkgs.mpvScripts.mpris ]";
         description = ''

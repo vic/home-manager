@@ -5,12 +5,10 @@
 
 let
 
-  nmdSrc = pkgs.fetchFromGitLab {
-    name = "nmd";
-    owner = "rycee";
-    repo = "nmd";
-    rev = "de522bdd533350b3afb41e1ce9b3afb72922fba2";
-    sha256 = "1ji4q7b48nnicgpnnl6yb9xb9zfkmmzkch4yifinphw3ag38qrmd";
+  nmdSrc = fetchTarball {
+    url =
+      "https://gitlab.com/api/v4/projects/rycee%2Fnmd/repository/archive.tar.gz?sha=91dee681dd1c478d6040a00835d73c0f4a4c5c29";
+    sha256 = "07szg39wmna287hv5w9hl45wvm04zbh0k54br59nv3yzvg9ymlj4";
   };
 
   nmd = import nmdSrc { inherit lib pkgs; };
@@ -25,6 +23,8 @@ let
       };
     }];
   };
+
+  dontCheckDefinitions = { _module.check = false; };
 
   buildModulesDocs = args:
     nmd.buildModulesDocs ({
@@ -43,21 +43,7 @@ let
   };
 
   nixosModuleDocs = buildModulesDocs {
-    modules = let
-      nixosModule = module: pkgs.path + "/nixos/modules" + module;
-      mockedNixos = with lib; {
-        options = {
-          environment.pathsToLink = mkSinkUndeclaredOptions { };
-          systemd.services = mkSinkUndeclaredOptions { };
-          users.users = mkSinkUndeclaredOptions { };
-        };
-      };
-    in [
-      ../nixos/default.nix
-      mockedNixos
-      (nixosModule "/misc/assertions.nix")
-      scrubbedPkgsModule
-    ];
+    modules = [ ../nixos scrubbedPkgsModule dontCheckDefinitions ];
     docBook = {
       id = "nixos-options";
       optionIdPrefix = "nixos-opt";
@@ -65,22 +51,7 @@ let
   };
 
   nixDarwinModuleDocs = buildModulesDocs {
-    modules = let
-      nixosModule = module: pkgs.path + "/nixos/modules" + module;
-      mockedNixDarwin = with lib; {
-        options = {
-          environment.pathsToLink = mkSinkUndeclaredOptions { };
-          system.activationScripts.postActivation.text =
-            mkSinkUndeclaredOptions { };
-          users.users = mkSinkUndeclaredOptions { };
-        };
-      };
-    in [
-      ../nix-darwin/default.nix
-      mockedNixDarwin
-      (nixosModule "/misc/assertions.nix")
-      scrubbedPkgsModule
-    ];
+    modules = [ ../nix-darwin scrubbedPkgsModule dontCheckDefinitions ];
     docBook = {
       id = "nix-darwin-options";
       optionIdPrefix = "nix-darwin-opt";
@@ -89,6 +60,7 @@ let
 
   docs = nmd.buildDocBookDocs {
     pathName = "home-manager";
+    projectName = "Home Manager";
     modulesDocs = [ hmModulesDocs nixDarwinModuleDocs nixosModuleDocs ];
     documentsDirectory = ./.;
     documentType = "book";

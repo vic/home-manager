@@ -270,13 +270,13 @@ let
         "floating_modifier ${floating.modifier}"
         (windowBorderString window floating)
         "hide_edge_borders ${window.hideEdgeBorders}"
-        "focus_wrapping ${if focus.forceWrapping then "yes" else "no"}"
+        "focus_wrapping ${lib.hm.booleans.yesNo focus.forceWrapping}"
         "focus_follows_mouse ${focus.followMouse}"
         "focus_on_window_activation ${focus.newWindow}"
         "mouse_warping ${if focus.mouseWarping then "output" else "none"}"
         "workspace_layout ${workspaceLayout}"
         "workspace_auto_back_and_forth ${
-          if workspaceAutoBackAndForth then "yes" else "no"
+          lib.hm.booleans.yesNo workspaceAutoBackAndForth
         }"
         "client.focused ${colorSetStr colors.focused}"
         "client.focused_inactive ${colorSetStr colors.focusedInactive}"
@@ -309,7 +309,7 @@ let
       )
     else
       [ ]) ++ (optional cfg.systemdIntegration ''
-        exec "systemctl --user import-environment; systemctl --user start sway-session.target"'')
+        exec "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP; systemctl --user start sway-session.target"'')
       ++ (optional (!cfg.xwayland) "xwayland disable") ++ [ cfg.extraConfig ]));
 
   defaultSwayPackage = pkgs.sway.override {
@@ -320,7 +320,7 @@ let
   };
 
 in {
-  meta.maintainers = with maintainers; [ alexarice sumnerevans sebtm ];
+  meta.maintainers = with maintainers; [ alexarice sumnerevans sebtm oxalica ];
 
   options.wayland.windowManager.sway = {
     enable = mkEnableOption "sway wayland compositor";
@@ -346,6 +346,14 @@ in {
         Whether to enable <filename>sway-session.target</filename> on
         sway startup. This links to
         <filename>graphical-session.target</filename>.
+        Some important environment variables will be imported to systemd
+        and dbus user environment before reaching the target, including
+        <itemizedlist>
+          <listitem><para><literal>DISPLAY</literal></para></listitem>
+          <listitem><para><literal>WAYLAND_DISPLAY</literal></para></listitem>
+          <listitem><para><literal>SWAYSOCK</literal></para></listitem>
+          <listitem><para><literal>XDG_CURRENT_DESKTOP</literal></para></listitem>
+        </itemizedlist>
       '';
     };
 
@@ -431,12 +439,14 @@ in {
       home.packages = optional (cfg.package != null) cfg.package
         ++ optional cfg.xwayland pkgs.xwayland;
 
-      xdg.configFile."sway/config" = {
+      xdg.configFile."sway/config" = let
+        swayPackage = if cfg.package == null then pkgs.sway else cfg.package;
+      in {
         source = configFile;
         onChange = ''
-          swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
-          if [ -S $swaySocket ]; then
-            ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
+          swaySocket="''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep --uid $UID -x sway || true).sock"
+          if [ -S "$swaySocket" ]; then
+            ${swayPackage}/bin/swaymsg -s $swaySocket reload
           fi
         '';
       };

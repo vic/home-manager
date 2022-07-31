@@ -15,8 +15,8 @@ let
 
   mkEvent = e: [ e.event (escapeShellArg e.command) ];
 
-  args = (concatMap mkTimeout cfg.timeouts) ++ (concatMap mkEvent cfg.events)
-    ++ cfg.extraArgs;
+  args = cfg.extraArgs ++ (concatMap mkTimeout cfg.timeouts)
+    ++ (concatMap mkEvent cfg.events);
 
 in {
   meta.maintainers = [ maintainers.c0deaddict ];
@@ -108,6 +108,8 @@ in {
 
       Service = {
         Type = "simple";
+        # swayidle executes commands using "sh -c", so the PATH needs to contain a shell.
+        Environment = [ "PATH=${makeBinPath [ pkgs.bash ]}" ];
         ExecStart =
           "${cfg.package}/bin/swayidle -w ${concatStringsSep " " args}";
       };

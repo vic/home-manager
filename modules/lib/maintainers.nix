@@ -55,6 +55,12 @@
     github = "chisui";
     githubId = 4526429;
   };
+  foo-dogsquared = {
+    name = "Gabriel Arazas";
+    email = "foo.dogsquared@gmail.com";
+    github = "foo-dogsquared";
+    githubId = 34962634;
+  };
   olmokramer = {
     name = "Olmo Kramer";
     email = "olmokramer@users.noreply.github.com";
@@ -101,6 +107,12 @@
     github = "matrss";
     githubId = 9308656;
   };
+  mforster = {
+    name = "Michael Forster";
+    email = "email@michael-forster.de";
+    github = "MForster";
+    githubId = 4067975;
+  };
   mifom = {
     name = "mifom";
     email = "mifom@users.noreply.github.com";
@@ -122,6 +134,12 @@
     github = "Fendse";
     githubId = 46252070;
     name = "Sara Johnsson";
+  };
+  florpe = {
+    email = "jens.krewald@gmail.com";
+    github = "florpe";
+    githubId = 53856373;
+    name = "Jens Krewald";
   };
   maximsmol = {
     email = "maximsmol@gmail.com";
@@ -229,6 +247,12 @@
     github = "pinage404";
     githubId = 6325757;
   };
+  podocarp = {
+    name = "Jia Xiaodong";
+    email = "xdjiaxd@gmail.com";
+    github = "podocarp";
+    githubId = 10473184;
+  };
   mainrs = {
     name = "mainrs";
     email = "5113257+mainrs@users.noreply.github.com";
@@ -246,5 +270,27 @@
     email = "sebtm@users.noreply.github.com";
     github = "sebtm";
     githubId = 17243347;
+  };
+  rszamszur = {
+    name = "Radosław Szamszur";
+    email = "radoslawszamszur@gmail.com";
+    github = "rszamszur";
+    githubId = 10353018;
+  };
+  rcerc = {
+    name = "rcerc";
+    email = "88944439+rcerc@users.noreply.github.com";
+    github = "rcerc";
+    githubId = 88944439;
+    keys = [{
+      longkeyid = "ed25519/0x3F98EC7EC2B87ED1";
+      fingerprint = "D5D6 FD1F 0D9A 3284 FB9B  C26D 3F98 EC7E C2B8 7ED1";
+    }];
+  };
+  mtoohey = {
+    name = "Matthew Toohey";
+    email = "contact@mtoohey.com";
+    github = "mtoohey31";
+    githubId = 36740602;
   };
 }
