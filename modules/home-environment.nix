@@ -634,11 +634,10 @@ in
             echo '{}' | nix profile install --profile "$nixProfilePath" -f -
           fi
           if [[ -e "$nixProfilePath"/manifest.json ]] ; then
-            nix profile list \
+            nix profile list --profile "$nixProfilePath" \
               | { grep '${config.home.pathName}$' || test $? = 1; } \
               | awk -F ' ' '{ print $4 }' \
-              | cut -d ' ' -f 4 \
-              | xargs -t $DRY_RUN_CMD nix profile remove $VERBOSE_ARG
+              | xargs -t $DRY_RUN_CMD nix profile remove --profile "$nixProfilePath" $VERBOSE_ARG
           else
             if nix-env -q | grep '^${config.home.pathName}$'; then
               $DRY_RUN_CMD nix-env -e ${config.home.pathName}
@@ -651,6 +650,10 @@ in
             echo '{}' | nix profile install --profile "$nixProfilePath" -f -
           fi
           if [[ -e "$nixProfilePath"/manifest.json ]] ; then
+            nix profile list --profile "$nixProfilePath" \
+              | { grep '${config.home.pathName}$' || test $? = 1; } \
+              | awk -F ' ' '{ print $4 }' \
+              | xargs -t $DRY_RUN_CMD nix profile remove --profile "$nixProfilePath" $VERBOSE_ARG
             INSTALL_CMD="nix profile install --profile $nixProfilePath"
             LIST_CMD="nix profile list --profile $nixProfilePath"
             REMOVE_CMD_SYNTAX="nix profile remove --profile $nixProfilePath {number | store path}"
