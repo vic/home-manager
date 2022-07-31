@@ -710,12 +710,21 @@ in
           set -eu
           set -o pipefail
 
-          cd $HOME
-
           export PATH="${activationBinPaths}"
           ${config.lib.bash.initHomeManagerLib}
 
           ${builtins.readFile ./lib-bash/activation-init.sh}
+
+          # If configured homeDirectory is different from user's default home.
+          if [ "$HOME" != "${config.home.homeDirectory}" ]; then
+            HOME="${config.home.homeDirectory}"
+            if [ ! -d "$HOME" ]; then
+              mkdir -p "$HOME"
+              ln -sf $nixProfilePath $HOME/.nix-profile
+            fi
+          fi
+          cd $HOME
+
 
           ${activationCmds}
         '';
