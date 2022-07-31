@@ -191,6 +191,15 @@ in
       '';
     };
 
+    home.profileLinkNamePrefix = mkOption {
+      type = types.str;
+      default = "profile";
+      internal = true;
+      description = ''
+        The prefix of the link name of the profile.
+      '';
+    };
+
     home.generationLinkNamePrefix = mkOption {
       type = types.str;
       default = "home-manager";
@@ -743,6 +752,7 @@ in
             ln -s $out/activate $out/bin/home-manager-generation
 
             substituteInPlace $out/activate \
+              --subst-var-by PROFILE_LINK_PREFIX ${config.home.profileLinkNamePrefix} \
               --subst-var-by GEN_LINK_PREFIX ${config.home.generationLinkNamePrefix} \
               --subst-var-by GC_LINK_NAME ${config.home.gcLinkName} \
               --subst-var-by GENERATION_DIR $out
