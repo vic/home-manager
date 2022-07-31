@@ -630,6 +630,9 @@ in
       if config.submoduleSupport.externalPackageInstall
       then
         ''
+          if [[ ! -e "$nixProfilePath" ]] ; then
+            echo '{}' | nix profile install --profile "$nixProfilePath" -f -
+          fi
           if [[ -e "$nixProfilePath"/manifest.json ]] ; then
             nix profile list \
               | { grep '${config.home.pathName}$' || test $? = 1; } \
@@ -644,10 +647,13 @@ in
         ''
       else
         ''
+          if [[ ! -e "$nixProfilePath" ]] ; then
+            echo '{}' | nix profile install --profile "$nixProfilePath" -f -
+          fi
           if [[ -e "$nixProfilePath"/manifest.json ]] ; then
-            INSTALL_CMD="nix profile install"
-            LIST_CMD="nix profile list"
-            REMOVE_CMD_SYNTAX='nix profile remove {number | store path}'
+            INSTALL_CMD="nix profile install --profile $nixProfilePath"
+            LIST_CMD="nix profile list --profile $nixProfilePath"
+            REMOVE_CMD_SYNTAX="nix profile remove --profile $nixProfilePath {number | store path}"
           else
             INSTALL_CMD="nix-env -i"
             LIST_CMD="nix-env -q"
