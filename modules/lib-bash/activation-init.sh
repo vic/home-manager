@@ -23,8 +23,8 @@ function setupVars() {
         declare -gr newGenNum=1
     fi
 
-    if [[ -e $profilesPath/@GEN_LINK_PREFIX@ ]] ; then
-        oldGenPath="$(readlink -e "$profilesPath/@GEN_LINK_PREFIX@")"
+    if [[ -e $genProfilePath ]] ; then
+        oldGenPath="$(readlink -e "$genProfilePath")"
         declare -gr oldGenPath
     fi
 
